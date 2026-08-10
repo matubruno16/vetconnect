@@ -10,6 +10,7 @@ export async function updateVeterinarian(id: string, formData: FormData) {
     .update({
       name: formData.get("name"),
       license_number: formData.get("license_number"),
+      responsible_name: formData.get("responsible_name"),
       phone: formData.get("phone"),
       address: formData.get("address"),
       city_id: formData.get("city_id"),

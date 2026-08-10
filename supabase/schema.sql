@@ -25,6 +25,7 @@ create table if not exists veterinarians (
   name text not null,
   slug text not null unique,
   license_number text,
+  responsible_name text,
   description text,
   phone text,
   whatsapp text,
@@ -48,6 +49,7 @@ create table if not exists veterinarian_specialties (
 
 alter table veterinarians add column if not exists latitude double precision;
 alter table veterinarians add column if not exists longitude double precision;
+alter table veterinarians add column if not exists responsible_name text;
 
 create table if not exists schedules (
   id uuid primary key default gen_random_uuid(),

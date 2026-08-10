@@ -18,6 +18,7 @@ export async function createVeterinarian(formData: FormData) {
       name,
       slug,
       license_number: formData.get("license_number"),
+      responsible_name: formData.get("responsible_name"),
       phone: formData.get("phone"),
       address: formData.get("address"),
       city_id: formData.get("city_id"),

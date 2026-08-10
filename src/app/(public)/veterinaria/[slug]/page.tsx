@@ -97,6 +97,13 @@ export default async function VeterinarianDetailPage({
           )}
 
           <div className="space-y-4">
+            {veterinarian.responsible_name && (
+              <div>
+                <h2 className="font-semibold">Veterinario responsable</h2>
+                <p>{veterinarian.responsible_name}</p>
+              </div>
+            )}
+
             <div>
               <h2 className="flex items-center gap-2 font-semibold">
                 <BadgeCheck size={16} />

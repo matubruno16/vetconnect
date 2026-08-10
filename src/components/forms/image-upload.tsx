@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, useRef, useState } from "react";
-import { ImagePlus } from "lucide-react";
+import { Camera, ImagePlus } from "lucide-react";
 import {
   uploadGalleryImage,
   type UploadImageState,
@@ -10,6 +10,7 @@ import { deleteGalleryImage } from "@/features/veterinarians/actions/delete-gall
 import { validateImageFile } from "@/lib/gallery";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { SectionHeading } from "@/components/forms/section-heading";
 
 interface ImageUploadProps {
   veterinarianId: string;
@@ -69,7 +70,7 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
     // No usa <form> a propósito: esto vive anidado dentro del form principal
     // de VeterinarianForm, y HTML no permite forms anidados.
     <div className="space-y-4">
-      <h2 className="text-sm font-medium">Fotos</h2>
+      <SectionHeading icon={Camera}>Fotos</SectionHeading>
 
       {images.length > 0 && (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
