@@ -72,7 +72,7 @@ export default async function VeterinarianDetailPage({
           <img
             src={coverImage}
             alt={veterinarian.name}
-            className="h-56 w-full object-cover sm:h-72"
+            className="h-72 w-full object-cover object-center sm:h-96"
           />
 
           <div className="space-y-8 p-8">
@@ -206,7 +206,7 @@ export default async function VeterinarianDetailPage({
                     key={image.id}
                     src={image.image_url}
                     alt={veterinarian.name}
-                    className="aspect-square w-full rounded-lg border object-cover"
+                    className="aspect-square w-full rounded-lg border object-cover object-center"
                   />
                 ))}
               </div>

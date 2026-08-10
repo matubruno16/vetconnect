@@ -46,7 +46,7 @@ export function VeterinarianCard({
         <img
           src={coverImage || "/sin_avatar.avif"}
           alt={veterinarian.name}
-          className="h-36 w-full object-cover"
+          className="h-48 w-full object-cover object-center"
         />
 
         <div className="flex flex-1 flex-col p-5">

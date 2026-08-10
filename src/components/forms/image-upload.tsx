@@ -78,7 +78,7 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
               <img
                 src={image.image_url}
                 alt=""
-                className="aspect-square w-full rounded-lg border object-cover"
+                className="aspect-square w-full rounded-lg border object-cover object-center"
               />
               <div className="absolute top-1 right-1">
                 <ConfirmDialog
