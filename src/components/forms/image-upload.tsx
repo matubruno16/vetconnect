@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { startTransition, useActionState, useRef, useState } from "react";
 import { ImagePlus } from "lucide-react";
 import {
   uploadGalleryImage,
@@ -9,7 +9,6 @@ import {
 import { deleteGalleryImage } from "@/features/veterinarians/actions/delete-gallery-image";
 import { validateImageFile } from "@/lib/gallery";
 import { Button } from "@/components/ui/button";
-import { SubmitButton } from "@/components/shared/submit-button";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 
 interface ImageUploadProps {
@@ -20,7 +19,10 @@ interface ImageUploadProps {
 const initialState: UploadImageState = { error: null };
 
 export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
-  const [state, formAction] = useActionState(uploadGalleryImage, initialState);
+  const [state, formAction, isPending] = useActionState(
+    uploadGalleryImage,
+    initialState,
+  );
   const [clientError, setClientError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,14 +47,27 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
     setSelectedFile(file);
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleUpload() {
     if (!selectedFile) {
-      e.preventDefault();
       setClientError("Elegí una foto para subir.");
+      return;
     }
+
+    const fd = new FormData();
+    fd.append("veterinarian_id", veterinarianId);
+    fd.append("file", selectedFile);
+
+    setClientError(null);
+    startTransition(() => {
+      formAction(fd);
+    });
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   return (
+    // No usa <form> a propósito: esto vive anidado dentro del form principal
+    // de VeterinarianForm, y HTML no permite forms anidados.
     <div className="space-y-4">
       <h2 className="text-sm font-medium">Fotos</h2>
 
@@ -87,16 +102,10 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
         </div>
       )}
 
-      <form
-        action={formAction}
-        onSubmit={handleSubmit}
-        className="flex flex-wrap items-center gap-3"
-      >
-        <input type="hidden" name="veterinarian_id" value={veterinarianId} />
+      <div className="flex flex-wrap items-center gap-3">
         <input
           ref={fileInputRef}
           type="file"
-          name="file"
           accept="image/png,image/jpeg,image/webp"
           onChange={handleFileChange}
           className="sr-only"
@@ -115,14 +124,15 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
           {selectedFile ? selectedFile.name : "Ningún archivo elegido"}
         </span>
 
-        <SubmitButton
+        <Button
+          type="button"
           variant="outline"
-          pendingText="Subiendo..."
-          disabled={!selectedFile}
+          onClick={handleUpload}
+          disabled={!selectedFile || isPending}
         >
-          Subir foto
-        </SubmitButton>
-      </form>
+          {isPending ? "Subiendo..." : "Subir foto"}
+        </Button>
+      </div>
 
       <p className="text-xs text-muted-foreground">
         Formatos permitidos: JPG, PNG o WEBP. Hasta 5MB.

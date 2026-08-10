@@ -55,6 +55,9 @@ export default async function VeterinarianDetailPage({
       .order("display_order", { ascending: true }),
   ]);
 
+  const coverImage = galleryImages?.[0]?.image_url || "/sin_avatar.avif";
+  const otherImages = galleryImages?.slice(1) ?? [];
+
   return (
     <main className="min-h-screen bg-muted/30">
       <section className="mx-auto max-w-4xl px-6 py-16">
@@ -65,7 +68,14 @@ export default async function VeterinarianDetailPage({
           <ArrowLeft size={16} />
           Volver al listado
         </Link>
-        <div className="rounded-2xl bg-card p-8 shadow-sm border space-y-8">
+        <div className="overflow-hidden rounded-2xl bg-card shadow-sm border">
+          <img
+            src={coverImage}
+            alt={veterinarian.name}
+            className="h-56 w-full object-cover sm:h-72"
+          />
+
+          <div className="space-y-8 p-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold">{veterinarian.name}</h1>
@@ -187,11 +197,11 @@ export default async function VeterinarianDetailPage({
             </div>
           </div>
 
-          {galleryImages && galleryImages.length > 0 && (
+          {otherImages.length > 0 && (
             <div>
               <h2 className="mb-3 font-semibold">Fotos</h2>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {galleryImages.map((image) => (
+                {otherImages.map((image) => (
                   <img
                     key={image.id}
                     src={image.image_url}
@@ -243,6 +253,7 @@ export default async function VeterinarianDetailPage({
               latitude={veterinarian.latitude}
               longitude={veterinarian.longitude}
             />
+          </div>
           </div>
         </div>
       </section>

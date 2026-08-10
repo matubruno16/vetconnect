@@ -3,7 +3,7 @@ import { SubmitButton } from "@/components/shared/submit-button";
 import LocationPicker from "@/components/maps/location-picker-loader";
 import { ImageUpload } from "@/components/forms/image-upload";
 import { FilePicker } from "@/components/forms/file-picker";
-import { WEEKDAYS } from "@/constants/weekdays";
+import { ScheduleEditor } from "@/components/forms/schedule-editor";
 
 interface VeterinarianFormValues {
   id: string;
@@ -258,56 +258,21 @@ export function VeterinarianForm({
         </div>
       )}
 
+      {isEditing && veterinarian && (
+        <div className="border-t pt-6">
+          <ImageUpload veterinarianId={veterinarian.id} images={galleryImages} />
+        </div>
+      )}
+
       <div className="space-y-3 border-t pt-6">
         <h2 className="text-sm font-medium">Horarios de atención</h2>
-
-        {WEEKDAYS.map(({ day_of_week, label }) => {
-            const row = schedules.find((s) => s.day_of_week === day_of_week);
-
-            return (
-              <div
-                key={day_of_week}
-                className="flex flex-wrap items-center gap-3 rounded-lg border p-3"
-              >
-                <span className="w-24 text-sm font-medium">{label}</span>
-
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    name={`is_closed_${day_of_week}`}
-                    defaultChecked={row?.is_closed ?? true}
-                  />
-                  Cerrado
-                </label>
-
-                <input
-                  type="time"
-                  name={`open_${day_of_week}`}
-                  defaultValue={row?.open_time ?? ""}
-                  className="rounded-md border px-2 py-1 text-sm"
-                />
-                <span className="text-sm text-muted-foreground">a</span>
-                <input
-                  type="time"
-                  name={`close_${day_of_week}`}
-                  defaultValue={row?.close_time ?? ""}
-                  className="rounded-md border px-2 py-1 text-sm"
-                />
-              </div>
-            );
-          })}
+        <ScheduleEditor schedules={schedules} />
       </div>
 
       <SubmitButton className="w-full" pendingText="Guardando...">
         {submitLabel}
       </SubmitButton>
       </form>
-
-      {isEditing && veterinarian && (
-        <div className="border-t pt-6">
-          <ImageUpload veterinarianId={veterinarian.id} images={galleryImages} />
-        </div>
-      )}
     </div>
   );
 }

@@ -24,9 +24,13 @@ export async function updateSchedules(
     };
   });
 
-  await supabase
+  const { error } = await supabase
     .from("schedules")
     .upsert(rows, { onConflict: "veterinarian_id,day_of_week" });
+
+  if (error) {
+    console.log("[updateSchedules]", error);
+  }
 
   revalidatePath(`/admin/veterinarians/${veterinarianId}/edit`);
 }

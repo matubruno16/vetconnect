@@ -59,6 +59,29 @@ create table if not exists schedules (
   unique (veterinarian_id, day_of_week)
 );
 
+-- La tabla puede haber sido creada antes sin este constraint (necesario para
+-- que el upsert de horarios sepa qué fila reemplazar). Lo agregamos si falta,
+-- primero eliminando duplicados por veterinaria+día para que el constraint
+-- se pueda crear sin error.
+delete from schedules a
+using schedules b
+where a.veterinarian_id = b.veterinarian_id
+  and a.day_of_week = b.day_of_week
+  and a.id < b.id;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid = 'schedules'::regclass
+      and contype = 'u'
+  ) then
+    alter table schedules
+      add constraint schedules_veterinarian_id_day_of_week_key
+      unique (veterinarian_id, day_of_week);
+  end if;
+end $$;
+
 create table if not exists gallery_images (
   id uuid primary key default gen_random_uuid(),
   veterinarian_id uuid not null references veterinarians (id) on delete cascade,
