@@ -40,6 +40,7 @@ interface VeterinarianFormProps {
   galleryImages?: { id: string; image_url: string }[];
   action: (formData: FormData) => Promise<void>;
   submitLabel: string;
+  showStatusControls?: boolean;
 }
 
 export function VeterinarianForm({
@@ -51,6 +52,7 @@ export function VeterinarianForm({
   galleryImages = [],
   action,
   submitLabel,
+  showStatusControls = true,
 }: VeterinarianFormProps) {
   const isEditing = Boolean(veterinarian);
 
@@ -194,17 +196,19 @@ export function VeterinarianForm({
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        <input
-          id="is_active"
-          type="checkbox"
-          name="is_active"
-          defaultChecked={veterinarian ? veterinarian.is_active : true}
-        />
-        <label htmlFor="is_active" className="text-sm font-medium">
-          Veterinaria activa
-        </label>
-      </div>
+      {showStatusControls && (
+        <div className="flex items-center gap-3">
+          <input
+            id="is_active"
+            type="checkbox"
+            name="is_active"
+            defaultChecked={veterinarian ? veterinarian.is_active : true}
+          />
+          <label htmlFor="is_active" className="text-sm font-medium">
+            Veterinaria activa
+          </label>
+        </div>
+      )}
 
       <div className="flex items-center gap-3">
         <input
@@ -218,17 +222,19 @@ export function VeterinarianForm({
         </label>
       </div>
 
-      <div className="flex items-center gap-3">
-        <input
-          id="is_featured"
-          type="checkbox"
-          name="is_featured"
-          defaultChecked={veterinarian?.is_featured}
-        />
-        <label htmlFor="is_featured" className="text-sm font-medium">
-          Destacado
-        </label>
-      </div>
+      {showStatusControls && (
+        <div className="flex items-center gap-3">
+          <input
+            id="is_featured"
+            type="checkbox"
+            name="is_featured"
+            defaultChecked={veterinarian?.is_featured}
+          />
+          <label htmlFor="is_featured" className="text-sm font-medium">
+            Destacado
+          </label>
+        </div>
+      )}
 
       <div className="space-y-3">
         <h2 className="text-sm font-medium">Especialidades</h2>

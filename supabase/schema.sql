@@ -162,6 +162,20 @@ drop policy if exists "vet_specialties_write_admin" on veterinarian_specialties;
 create policy "vet_specialties_write_admin" on veterinarian_specialties
   for all to authenticated using (true) with check (true);
 
+-- El formulario de registro self-service también deja elegir especialidades,
+-- horarios y una foto. Se permite insertarlos solo mientras la veterinaria
+-- todavía está pendiente de aprobación (is_active = false) — una vez
+-- aprobada, sólo el admin puede seguir editándolos.
+drop policy if exists "vet_specialties_public_register" on veterinarian_specialties;
+create policy "vet_specialties_public_register" on veterinarian_specialties
+  for insert to anon
+  with check (
+    exists (
+      select 1 from veterinarians v
+      where v.id = veterinarian_id and v.is_active = false
+    )
+  );
+
 drop policy if exists "schedules_select_all" on schedules;
 create policy "schedules_select_all" on schedules
   for select to anon, authenticated using (true);
@@ -169,6 +183,16 @@ create policy "schedules_select_all" on schedules
 drop policy if exists "schedules_write_admin" on schedules;
 create policy "schedules_write_admin" on schedules
   for all to authenticated using (true) with check (true);
+
+drop policy if exists "schedules_public_register" on schedules;
+create policy "schedules_public_register" on schedules
+  for insert to anon
+  with check (
+    exists (
+      select 1 from veterinarians v
+      where v.id = veterinarian_id and v.is_active = false
+    )
+  );
 
 drop policy if exists "gallery_images_select_all" on gallery_images;
 create policy "gallery_images_select_all" on gallery_images
@@ -178,10 +202,26 @@ drop policy if exists "gallery_images_write_admin" on gallery_images;
 create policy "gallery_images_write_admin" on gallery_images
   for all to authenticated using (true) with check (true);
 
--- Storage: lectura pública de las fotos, escritura solo para admins logueados.
+drop policy if exists "gallery_images_public_register" on gallery_images;
+create policy "gallery_images_public_register" on gallery_images
+  for insert to anon
+  with check (
+    exists (
+      select 1 from veterinarians v
+      where v.id = veterinarian_id and v.is_active = false
+    )
+  );
+
+-- Storage: lectura pública de las fotos, escritura para admins logueados y
+-- para el registro self-service (sube la foto antes de que exista sesión).
 drop policy if exists "vet_images_select_all" on storage.objects;
 create policy "vet_images_select_all" on storage.objects
   for select to anon, authenticated using (bucket_id = 'vet-images');
+
+drop policy if exists "vet_images_public_register" on storage.objects;
+create policy "vet_images_public_register" on storage.objects
+  for insert to anon
+  with check (bucket_id = 'vet-images');
 
 drop policy if exists "vet_images_write_admin" on storage.objects;
 create policy "vet_images_write_admin" on storage.objects
