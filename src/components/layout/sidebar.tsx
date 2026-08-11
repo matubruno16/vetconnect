@@ -9,6 +9,7 @@ import {
   Building2,
   MapPin,
   Stethoscope,
+  PawPrint,
   Users,
   Settings,
   LogOut,
@@ -24,6 +25,11 @@ const links = [
     href: "/admin/veterinarians",
     label: "Veterinarias",
     icon: Building2,
+  },
+  {
+    href: "/admin/lost-pets",
+    label: "Mascotas perdidas",
+    icon: PawPrint,
   },
   {
     href: "/admin/cities",

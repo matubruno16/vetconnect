@@ -12,6 +12,13 @@ export function Navbar() {
 
         <div className="flex items-center gap-6">
           <Link
+            href="/perdidos"
+            className="text-sm font-medium text-muted-foreground hover:text-amber-600"
+          >
+            Mascotas perdidas
+          </Link>
+
+          <Link
             href="/registrarse"
             className="text-sm font-medium text-muted-foreground hover:text-primary"
           >

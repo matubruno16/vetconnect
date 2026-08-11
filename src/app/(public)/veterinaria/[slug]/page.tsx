@@ -12,6 +12,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { OpenNowBadge } from "@/components/shared/open-now-badge";
 import MapPreview from "@/components/maps/map-preview-loader";
 import { WEEKDAYS } from "@/constants/weekdays";
 
@@ -57,6 +58,9 @@ export default async function VeterinarianDetailPage({
 
   const coverImage = galleryImages?.[0]?.image_url || "/sin_avatar.avif";
   const otherImages = galleryImages?.slice(1) ?? [];
+  const todaySchedule = schedules?.find(
+    (s) => s.day_of_week === new Date().getDay(),
+  );
 
   return (
     <main className="min-h-screen bg-muted/30">
@@ -86,7 +90,13 @@ export default async function VeterinarianDetailPage({
               </p>
             </div>
 
-            <StatusBadge isActive={veterinarian.is_active} />
+            <div className="flex flex-col items-end gap-2">
+              <StatusBadge isActive={veterinarian.is_active} />
+              <OpenNowBadge
+                is24h={veterinarian.is_24h}
+                todaySchedule={todaySchedule}
+              />
+            </div>
           </div>
 
           {veterinarian.is_24h && (

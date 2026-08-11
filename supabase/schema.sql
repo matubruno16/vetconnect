@@ -98,6 +98,41 @@ insert into storage.buckets (id, name, public)
 values ('vet-images', 'vet-images', true)
 on conflict (id) do nothing;
 
+-- Mascotas perdidas: mural público, cualquiera puede publicar sin login.
+create table if not exists lost_pets (
+  id uuid primary key default gen_random_uuid(),
+  pet_name text not null,
+  species text not null,
+  breed text,
+  color text,
+  description text,
+  last_seen_location text not null,
+  last_seen_date date,
+  city_id uuid references cities (id) on delete set null,
+  latitude double precision,
+  longitude double precision,
+  image_url text,
+  contact_name text not null,
+  contact_phone text not null,
+  contact_whatsapp text,
+  status text not null default 'lost' check (status in ('lost', 'found')),
+  created_at timestamptz not null default now()
+);
+
+-- Token secreto para que quien reportó la mascota pueda marcarla como
+-- encontrada sin necesitar login. Va en una tabla separada (no en
+-- lost_pets) para que nunca quede expuesto por la policy de lectura
+-- pública de lost_pets — nadie puede leer esta tabla directo por la API,
+-- solo la función mark_lost_pet_found() (más abajo) puede consultarla.
+create table if not exists lost_pet_tokens (
+  lost_pet_id uuid primary key references lost_pets (id) on delete cascade,
+  token uuid not null default gen_random_uuid()
+);
+
+insert into storage.buckets (id, name, public)
+values ('lost-pets', 'lost-pets', true)
+on conflict (id) do nothing;
+
 -- Row Level Security
 -- Hoy la app llama a Supabase con la anon/publishable key (pública, va en el
 -- bundle del navegador). Sin RLS, cualquiera con esa key puede leer y
@@ -230,3 +265,105 @@ create policy "vet_images_write_admin" on storage.objects
   for all to authenticated
   using (bucket_id = 'vet-images')
   with check (bucket_id = 'vet-images');
+
+-- Mascotas perdidas: mural público. Cualquiera puede publicar y leer; solo
+-- un admin logueado puede editar (marcar "encontrada") o borrar (moderar
+-- spam/duplicados).
+alter table lost_pets enable row level security;
+
+drop policy if exists "lost_pets_select_all" on lost_pets;
+create policy "lost_pets_select_all" on lost_pets
+  for select to anon, authenticated using (true);
+
+drop policy if exists "lost_pets_insert_public" on lost_pets;
+create policy "lost_pets_insert_public" on lost_pets
+  for insert to anon, authenticated with check (true);
+
+drop policy if exists "lost_pets_update_admin" on lost_pets;
+create policy "lost_pets_update_admin" on lost_pets
+  for update to authenticated using (true) with check (true);
+
+drop policy if exists "lost_pets_delete_admin" on lost_pets;
+create policy "lost_pets_delete_admin" on lost_pets
+  for delete to authenticated using (true);
+
+drop policy if exists "lost_pets_images_select_all" on storage.objects;
+create policy "lost_pets_images_select_all" on storage.objects
+  for select to anon, authenticated using (bucket_id = 'lost-pets');
+
+drop policy if exists "lost_pets_images_insert_public" on storage.objects;
+create policy "lost_pets_images_insert_public" on storage.objects
+  for insert to anon, authenticated with check (bucket_id = 'lost-pets');
+
+drop policy if exists "lost_pets_images_write_admin" on storage.objects;
+create policy "lost_pets_images_write_admin" on storage.objects
+  for all to authenticated
+  using (bucket_id = 'lost-pets')
+  with check (bucket_id = 'lost-pets');
+
+-- lost_pet_tokens: sin ninguna policy de select, a propósito. Nadie puede
+-- leer el token directo por la API (ni con la anon key), solo insertarlo
+-- (al crear el aviso). La única forma de "usarlo" es a través de la
+-- función mark_lost_pet_found(), que corre con permisos elevados
+-- (security definer) y compara el token ahí adentro.
+alter table lost_pet_tokens enable row level security;
+
+drop policy if exists "lost_pet_tokens_insert_public" on lost_pet_tokens;
+create policy "lost_pet_tokens_insert_public" on lost_pet_tokens
+  for insert to anon, authenticated with check (true);
+
+-- Marca una mascota como encontrada solo si el token coincide con el que
+-- se generó al crear el aviso. security definer = corre saltando RLS, así
+-- puede leer lost_pet_tokens (que nadie más puede leer) para comparar.
+create or replace function mark_lost_pet_found(p_id uuid, p_token uuid)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_updated boolean;
+begin
+  update lost_pets
+  set status = 'found'
+  where id = p_id
+    and status = 'lost'
+    and exists (
+      select 1 from lost_pet_tokens t
+      where t.lost_pet_id = p_id and t.token = p_token
+    );
+
+  v_updated := found;
+  return v_updated;
+end;
+$$;
+
+grant execute on function mark_lost_pet_found(uuid, uuid) to anon, authenticated;
+
+-- Aviso público: para cuando quien encontró la mascota (o el dueño, si
+-- perdió su link con token) no tiene forma de marcarla como encontrada
+-- directamente. Esto NO cambia el estado — solo prende una bandera para
+-- que el admin lo vea en /admin/lost-pets y lo confirme él mismo. Por eso
+-- puede ser anon sin ningún token: lo peor que puede pasar es una bandera
+-- falsa que el admin ignora, nunca se pierde ni se altera información.
+alter table lost_pets add column if not exists found_reported_at timestamptz;
+
+create or replace function report_lost_pet_found_tip(p_id uuid)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_updated boolean;
+begin
+  update lost_pets
+  set found_reported_at = now()
+  where id = p_id and status = 'lost';
+
+  v_updated := found;
+  return v_updated;
+end;
+$$;
+
+grant execute on function report_lost_pet_found_tip(uuid) to anon, authenticated;

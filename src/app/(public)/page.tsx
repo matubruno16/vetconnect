@@ -112,7 +112,7 @@ export default async function HomePage({
         {veterinarians?.length === 0 ? (
           <p>No hay veterinarios disponibles.</p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 lg:grid-cols-2">
             {veterinarians?.map((vet) => (
               <VeterinarianCard
                 key={vet.id}
