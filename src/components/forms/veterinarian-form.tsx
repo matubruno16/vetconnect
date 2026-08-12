@@ -129,7 +129,7 @@ export function VeterinarianForm({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 px-6">
           <label htmlFor="description" className="text-sm font-medium">
             Descripción
           </label>
@@ -221,13 +221,16 @@ export function VeterinarianForm({
         </div>
       </div>
 
-      <div className="space-y-2">
-        <SectionHeading icon={MapPin}>Ubicación</SectionHeading>
-        <LocationPicker
-          defaultLatitude={veterinarian?.latitude ?? null}
-          defaultLongitude={veterinarian?.longitude ?? null}
-        />
-      </div>
+        <div className="space-y-2">
+          <SectionHeading icon={MapPin}>Ubicación</SectionHeading>
+          <div className="px-6">
+
+            <LocationPicker
+              defaultLatitude={veterinarian?.latitude ?? null}
+              defaultLongitude={veterinarian?.longitude ?? null}
+            />
+          </div>
+        </div>
 
       <div className="flex flex-wrap items-center gap-6">
         {showStatusControls && (
@@ -244,7 +247,7 @@ export function VeterinarianForm({
           </div>
         )}
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 px-6">
           <input
             id="is_24h"
             type="checkbox"
