@@ -35,7 +35,7 @@ export function InviteAdminForm() {
 
       {state.error && <p className="text-sm text-destructive">{state.error}</p>}
       {state.success && (
-        <p className="flex items-center gap-2 text-sm text-emerald-600">
+        <p className="flex items-center gap-2 text-sm text-violet-600">
           <CheckCircle2 size={14} />
           Invitación enviada.
         </p>

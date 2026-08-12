@@ -23,7 +23,7 @@ function toMinutes(time: string) {
 }
 
 const STYLES: Record<Status, { dot: string; text: string; label: string }> = {
-  open: { dot: "bg-emerald-500", text: "text-emerald-600", label: "Abierto ahora" },
+  open: { dot: "bg-violet-500", text: "text-violet-600", label: "Abierto ahora" },
   "closing-soon": { dot: "bg-amber-500", text: "text-amber-600", label: "Cierra pronto" },
   closed: { dot: "bg-red-500", text: "text-red-500", label: "Cerrado ahora" },
 };

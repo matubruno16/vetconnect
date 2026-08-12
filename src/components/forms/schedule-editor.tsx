@@ -56,7 +56,7 @@ export function ScheduleEditor({ schedules }: { schedules: ScheduleRow[] }) {
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 px-6">
       {WEEKDAYS.map(({ day_of_week, label }) => {
         const state = days[day_of_week];
 

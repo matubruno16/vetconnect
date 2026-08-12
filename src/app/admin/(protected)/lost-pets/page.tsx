@@ -44,7 +44,7 @@ export default async function AdminLostPetsPage() {
                     <p className="flex items-center gap-2 font-semibold">
                       {pet.pet_name}
                       {pet.found_reported_at && (
-                        <Badge className="bg-emerald-100 text-emerald-700">
+                        <Badge className="bg-violet-100 text-violet-700">
                           <Bell size={12} />
                           Avisaron que la encontraron
                         </Badge>
@@ -62,7 +62,7 @@ export default async function AdminLostPetsPage() {
                       variant="secondary"
                       className={
                         pet.status === "found"
-                          ? "bg-emerald-100 text-emerald-700"
+                          ? "bg-violet-100 text-violet-700"
                           : "bg-amber-100 text-amber-700"
                       }
                     >

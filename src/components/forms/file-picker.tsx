@@ -36,7 +36,7 @@ export function FilePicker({ name, label = "Seleccionar imagen" }: FilePickerPro
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 px-6">
       <input
         ref={inputRef}
         type="file"

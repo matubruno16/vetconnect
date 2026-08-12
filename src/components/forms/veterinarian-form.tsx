@@ -65,7 +65,7 @@ export function VeterinarianForm({
       <div className="space-y-4">
         <SectionHeading icon={Building2}>Datos de la veterinaria</SectionHeading>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 px-6">
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
               Nombre
@@ -93,7 +93,7 @@ export function VeterinarianForm({
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 px-6">
           <div className="space-y-2">
             <label htmlFor="city_id" className="text-sm font-medium">
               Ciudad
@@ -141,7 +141,7 @@ export function VeterinarianForm({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 px-6">
           <div className="space-y-2">
             <label htmlFor="website" className="text-sm font-medium">
               Website
@@ -165,7 +165,7 @@ export function VeterinarianForm({
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 px-6">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
               Email
@@ -194,7 +194,7 @@ export function VeterinarianForm({
       <div className="space-y-4">
         <SectionHeading icon={UserRound}>Datos del responsable</SectionHeading>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 px-6">
           <div className="space-y-2">
             <label htmlFor="responsible_name" className="text-sm font-medium">
               Veterinario responsable
@@ -274,7 +274,7 @@ export function VeterinarianForm({
       <div className="space-y-3">
         <SectionHeading icon={Stethoscope}>Especialidades</SectionHeading>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 px-6">
           {specialties?.map((specialty) => (
             <label
               key={specialty.id}
@@ -310,9 +310,11 @@ export function VeterinarianForm({
         <ScheduleEditor schedules={schedules} />
       </div>
 
-      <SubmitButton className="w-full" pendingText="Guardando...">
-        {submitLabel}
-      </SubmitButton>
+      <div className="flex justify-end pr-6">
+        <SubmitButton className="w-[180px]" pendingText="Guardando...">
+          {submitLabel}
+        </SubmitButton>
+      </div>
       </form>
     </div>
   );

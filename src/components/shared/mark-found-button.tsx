@@ -29,7 +29,7 @@ export function MarkFoundButton({ id, token, petName }: Props) {
 
   if (state?.success) {
     return (
-      <p className="flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+      <p className="flex items-center gap-2 rounded-lg bg-violet-50 px-4 py-3 text-sm font-medium text-violet-700">
         <CheckCircle2 size={16} />
         ¡Genial! Marcamos a {petName} como encontrada.
       </p>
@@ -44,7 +44,7 @@ export function MarkFoundButton({ id, token, petName }: Props) {
       <Button
         type="submit"
         disabled={isPending}
-        className="bg-emerald-600 text-white hover:bg-emerald-700"
+        className="bg-violet-600 text-white hover:bg-violet-700"
       >
         {isPending ? "Marcando..." : "Ya la encontré"}
       </Button>

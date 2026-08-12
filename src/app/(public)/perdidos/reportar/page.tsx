@@ -14,7 +14,7 @@ export default async function ReportLostPetPage() {
 
   return (
     <main className="min-h-screen bg-muted/30">
-      <section className="mx-auto max-w-2xl px-6 py-16">
+      <section className="mx-auto max-w-2xl px-6 py-16 lg:max-w-4xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight">
             Reportar mascota perdida
@@ -33,7 +33,7 @@ export default async function ReportLostPetPage() {
           <div className="space-y-4">
             <SectionHeading icon={PawPrint}>Datos de la mascota</SectionHeading>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 px-6">
               <div className="space-y-2">
                 <label htmlFor="pet_name" className="text-sm font-medium">
                   Nombre
@@ -60,7 +60,7 @@ export default async function ReportLostPetPage() {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 px-6">
               <div className="space-y-2">
                 <label htmlFor="breed" className="text-sm font-medium">
                   Raza
@@ -88,7 +88,7 @@ export default async function ReportLostPetPage() {
               />
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 px-6">
               <div className="space-y-2">
                 <label
                   htmlFor="last_seen_location"
@@ -146,7 +146,7 @@ export default async function ReportLostPetPage() {
               <Input id="contact_name" name="contact_name" required />
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 px-6">
               <div className="space-y-2">
                 <label htmlFor="contact_phone" className="text-sm font-medium">
                   Teléfono

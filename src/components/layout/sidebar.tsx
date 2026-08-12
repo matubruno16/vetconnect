@@ -74,7 +74,7 @@ export function Sidebar() {
         href="/"
         className="mb-8 flex items-center gap-3 px-1 text-xl font-bold text-primary"
       >
-        <span className="shrink-0 text-2xl">🐾</span>
+        <PawPrint size={26} className="shrink-0 text-violet-600" />
         <span className={LABEL_CLASSES}>VetConnect Admin</span>
       </Link>
 
@@ -88,7 +88,7 @@ export function Sidebar() {
               href={link.href}
               className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted"
             >
-              <Icon size={18} className="shrink-0" />
+              <Icon size={18} className="shrink-0 text-violet-400" />
               <span className={LABEL_CLASSES}>{link.label}</span>
             </Link>
           );

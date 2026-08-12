@@ -60,7 +60,7 @@ export default async function SettingsPage() {
             <div className="space-y-4">
               <SectionHeading icon={Phone}>Contacto</SectionHeading>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 px-6">
                 <div className="space-y-2">
                   <label htmlFor="contact_email" className="text-sm font-medium">
                     Email
@@ -103,7 +103,7 @@ export default async function SettingsPage() {
             <div className="space-y-4">
               <SectionHeading icon={Share2}>Redes sociales</SectionHeading>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 px-6">
                 <div className="space-y-2">
                   <label htmlFor="instagram" className="text-sm font-medium">
                     Instagram

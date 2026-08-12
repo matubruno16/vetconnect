@@ -103,7 +103,7 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 px-6">
         <input
           ref={fileInputRef}
           type="file"

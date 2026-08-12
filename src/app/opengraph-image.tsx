@@ -41,7 +41,21 @@ export default function OpengraphImage() {
               background: "linear-gradient(135deg, #7c3aed, #5b21b6)",
             }}
           >
-            <span style={{ fontSize: 56 }}>🐾</span>
+            <svg
+              width="56"
+              height="56"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="4" r="2" />
+              <circle cx="18" cy="8" r="2" />
+              <circle cx="20" cy="16" r="2" />
+              <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z" />
+            </svg>
           </div>
           <span style={{ fontSize: 84, fontWeight: 700, color: "#1e1b2e" }}>
             VetConnect

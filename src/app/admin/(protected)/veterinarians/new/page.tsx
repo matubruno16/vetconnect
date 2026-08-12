@@ -11,7 +11,7 @@ export default async function NewVeterinarianPage() {
   ]);
 
   return (
-    <div className="max-w-2xl space-y-8">
+    <div className="max-w-2xl space-y-8 lg:max-w-4xl">
       <div>
         <h1 className="text-3xl font-bold">Nueva Veterinaria</h1>
         <p className="text-muted-foreground">

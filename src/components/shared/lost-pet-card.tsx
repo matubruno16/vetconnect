@@ -52,7 +52,7 @@ export function LostPetCard({ pet }: Props) {
               variant="secondary"
               className={
                 pet.status === "found"
-                  ? "bg-emerald-100 text-emerald-700"
+                  ? "bg-violet-100 text-violet-700"
                   : "bg-amber-100 text-amber-700"
               }
             >

@@ -12,7 +12,7 @@ export default async function RegisterPage() {
 
   return (
     <main className="min-h-screen bg-muted/30">
-      <section className="mx-auto max-w-2xl px-6 py-16">
+      <section className="mx-auto max-w-2xl px-6 py-16 lg:max-w-4xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight">
             Registrar mi veterinaria
@@ -23,7 +23,7 @@ export default async function RegisterPage() {
           </p>
         </div>
 
-        <div className="rounded-2xl border bg-card p-8 shadow-sm">
+        <div className="rounded-2xl border bg-card p-8 shadow-sm ">
           <VeterinarianForm
             cities={cities ?? []}
             specialties={specialties ?? []}

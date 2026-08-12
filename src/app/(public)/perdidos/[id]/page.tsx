@@ -48,8 +48,8 @@ export default async function LostPetDetailPage({
         </Link>
 
         {token && pet.status === "lost" && (
-          <div className="mb-6 space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/60 p-5">
-            <p className="text-sm font-medium text-emerald-800">
+          <div className="mb-6 space-y-3 rounded-2xl border border-violet-200 bg-violet-50/60 p-5">
+            <p className="text-sm font-medium text-violet-800">
               Este es tu aviso. Guardá este enlace — es la única forma de
               marcarlo como encontrado sin tener que loguearte.
             </p>
@@ -93,7 +93,7 @@ export default async function LostPetDetailPage({
                 variant="secondary"
                 className={
                   pet.status === "found"
-                    ? "bg-emerald-100 text-emerald-700"
+                    ? "bg-violet-100 text-violet-700"
                     : "bg-amber-100 text-amber-700"
                 }
               >
@@ -140,7 +140,7 @@ export default async function LostPetDetailPage({
                       href={`https://wa.me/${pet.contact_whatsapp}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white"
+                      className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700"
                     >
                       <MessageCircle size={16} />
                       WhatsApp
