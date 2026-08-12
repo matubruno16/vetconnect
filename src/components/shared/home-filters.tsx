@@ -46,7 +46,7 @@ export default function HomeFilters({
       />
 
       <select
-        className="w-full rounded-md border px-3 py-2"
+        className="w-full rounded-md border px-3 h-8 text-sm"
         defaultValue={searchParams.get("city") || ""}
         onChange={(e) => updateParam("city", e.target.value)}
       >
@@ -59,7 +59,7 @@ export default function HomeFilters({
       </select>
 
       <select
-        className="w-full rounded-md border px-3 py-2"
+        className="w-full rounded-md border px-3 h-8 text-sm"
         defaultValue={searchParams.get("specialty") || ""}
         onChange={(e) => updateParam("specialty", e.target.value)}
       >

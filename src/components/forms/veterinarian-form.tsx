@@ -103,7 +103,7 @@ export function VeterinarianForm({
               id="city_id"
               name="city_id"
               defaultValue={veterinarian?.city_id ?? ""}
-              className="w-full rounded-md border px-3 py-2"
+              className="w-full rounded-md border pl-3 pr-6 h-8 text-sm"
               required
             >
               <option value="">Seleccionar ciudad</option>

@@ -38,7 +38,11 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims()
   const user = data?.claims
 
-  if (!user && !request.nextUrl.pathname.startsWith('/admin/login')) {
+  const isPublicAdminRoute =
+    request.nextUrl.pathname.startsWith('/admin/login') ||
+    request.nextUrl.pathname.startsWith('/admin/accept-invite')
+
+  if (!user && !isPublicAdminRoute) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'

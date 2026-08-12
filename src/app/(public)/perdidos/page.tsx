@@ -2,16 +2,31 @@ import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { LostPetCard } from "@/components/shared/lost-pet-card";
+import { Pagination } from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
 
-export default async function LostPetsPage() {
-  const supabase = await createClient();
+const PAGE_SIZE = 10;
 
-  const { data: pets } = await supabase
+export default async function LostPetsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const supabase = await createClient();
+  const page = Math.max(1, Number(params.page) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE; // uno de más, para saber si hay página siguiente
+
+  const { data: pageRows } = await supabase
     .from("lost_pets")
     .select("*, cities (name)")
     .eq("status", "lost")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  const hasMore = (pageRows?.length ?? 0) > PAGE_SIZE;
+  const pets = pageRows?.slice(0, PAGE_SIZE);
 
   return (
     <main className="min-h-screen bg-muted/30">
@@ -43,6 +58,13 @@ export default async function LostPetsPage() {
             ))}
           </div>
         )}
+
+        <Pagination
+          page={page}
+          hasMore={hasMore}
+          basePath="/perdidos"
+          searchParams={params}
+        />
       </section>
     </main>
   );

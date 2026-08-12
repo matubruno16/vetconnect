@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { VeterinarianCard } from "@/components/shared/veterinarian-card";
 import HomeFilters from "@/components/shared/home-filters";
+import { Pagination } from "@/components/shared/pagination";
+
+const PAGE_SIZE = 10;
 
 export default async function HomePage({
   searchParams,
@@ -11,10 +14,14 @@ export default async function HomePage({
     specialty?: string;
     open24?: string;
     featured?: string;
+    page?: string;
   }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
+  const page = Math.max(1, Number(params.page) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE; // pedimos uno de más para saber si hay página siguiente
 
   const specialtiesJoin = params.specialty
     ? "veterinarian_specialties!inner"
@@ -62,12 +69,15 @@ export default async function HomePage({
     );
   }
 
-  const [{ data: veterinarians }, { data: cities }, { data: specialties }] =
+  const [{ data: pageRows }, { data: cities }, { data: specialties }] =
     await Promise.all([
-      query.order("created_at", { ascending: false }),
+      query.order("created_at", { ascending: false }).range(from, to),
       supabase.from("cities").select("*"),
       supabase.from("specialties").select("*"),
     ]);
+
+  const hasMore = (pageRows?.length ?? 0) > PAGE_SIZE;
+  const veterinarians = pageRows?.slice(0, PAGE_SIZE);
 
   const vetIds = veterinarians?.map((vet) => vet.id) ?? [];
   const today = new Date().getDay();
@@ -123,6 +133,8 @@ export default async function HomePage({
             ))}
           </div>
         )}
+
+        <Pagination page={page} hasMore={hasMore} basePath="/" searchParams={params} />
       </section>
     </main>
   );

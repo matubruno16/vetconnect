@@ -12,10 +12,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const title = "VetConnect — Cartilla de veterinarios";
+const description =
+  "Encontrá veterinarios y clínicas veterinarias habilitadas por el Colegio de Veterinarios.";
+
 export const metadata: Metadata = {
-  title: "VetConnect — Cartilla de veterinarios",
-  description:
-    "Encontrá veterinarios y clínicas veterinarias habilitadas por el Colegio de Veterinarios.",
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    type: "website",
+    locale: "es_AR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({

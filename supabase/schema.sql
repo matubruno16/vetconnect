@@ -367,3 +367,28 @@ end;
 $$;
 
 grant execute on function report_lost_pet_found_tip(uuid) to anon, authenticated;
+
+-- Configuración institucional: una sola fila (id fijo en 1) con los datos
+-- de contacto/redes del colegio, para no hardcodearlos en el footer.
+create table if not exists site_settings (
+  id smallint primary key default 1 check (id = 1),
+  org_name text,
+  contact_email text,
+  contact_phone text,
+  contact_whatsapp text,
+  address text,
+  instagram text,
+  facebook text,
+  footer_text text,
+  updated_at timestamptz not null default now()
+);
+
+alter table site_settings enable row level security;
+
+drop policy if exists "site_settings_select_all" on site_settings;
+create policy "site_settings_select_all" on site_settings
+  for select to anon, authenticated using (true);
+
+drop policy if exists "site_settings_write_admin" on site_settings;
+create policy "site_settings_write_admin" on site_settings
+  for all to authenticated using (true) with check (true);
