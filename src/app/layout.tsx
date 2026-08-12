@@ -17,6 +17,7 @@ const description =
   "Encontrá veterinarios y clínicas veterinarias habilitadas por el Colegio de Veterinarios.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vetconnect-tandil.vercel.app"),
   title,
   description,
   openGraph: {
