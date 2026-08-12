@@ -31,7 +31,14 @@ export default async function HomePage({
     .from("veterinarians")
     .select(
       `
-    *,
+    id,
+    name,
+    slug,
+    phone,
+    whatsapp,
+    is_active,
+    is_24h,
+    created_at,
     cities (
       name
     ),
@@ -77,7 +84,10 @@ export default async function HomePage({
     ]);
 
   const hasMore = (pageRows?.length ?? 0) > PAGE_SIZE;
-  const veterinarians = pageRows?.slice(0, PAGE_SIZE);
+  const veterinarians = pageRows?.slice(0, PAGE_SIZE).map((vet) => ({
+    ...vet,
+    cities: Array.isArray(vet.cities) ? vet.cities[0] : vet.cities,
+  }));
 
   const vetIds = veterinarians?.map((vet) => vet.id) ?? [];
   const today = new Date().getDay();

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Calendar, MessageCircle, Phone, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -30,17 +31,23 @@ export function LostPetCard({ pet }: Props) {
         className="relative flex w-32 shrink-0 items-center justify-center overflow-hidden bg-linear-to-br from-amber-100 to-amber-200/70 sm:w-44"
       >
         {pet.image_url ? (
-          <img
+          <Image
             src={pet.image_url}
             alt={pet.pet_name}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            fill
+            sizes="(min-width: 640px) 176px, 128px"
+            className="object-cover object-center"
           />
         ) : (
-          <img
-            src="/sin_avatar.avif"
-            alt={pet.pet_name}
-            className="h-16 w-16 rounded-full border-4 border-white object-cover object-center shadow-sm sm:h-24 sm:w-24"
-          />
+          <div className="relative h-16 w-16 overflow-hidden rounded-full border-4 border-white shadow-sm sm:h-24 sm:w-24">
+            <Image
+              src="/sin_avatar.avif"
+              alt={pet.pet_name}
+              fill
+              sizes="96px"
+              className="object-cover object-center"
+            />
+          </div>
         )}
       </Link>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, useRef, useState } from "react";
+import Image from "next/image";
 import { Camera, ImagePlus } from "lucide-react";
 import {
   uploadGalleryImage,
@@ -75,11 +76,13 @@ export function ImageUpload({ veterinarianId, images }: ImageUploadProps) {
       {images.length > 0 && (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {images.map((image) => (
-            <div key={image.id} className="group relative">
-              <img
+            <div key={image.id} className="group relative aspect-square w-full overflow-hidden rounded-lg border">
+              <Image
                 src={image.image_url}
                 alt=""
-                className="aspect-square w-full rounded-lg border object-cover object-center"
+                fill
+                sizes="150px"
+                className="object-cover object-center"
               />
               <div className="absolute top-1 right-1">
                 <ConfirmDialog

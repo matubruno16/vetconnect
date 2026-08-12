@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   MapPin,
@@ -71,11 +72,16 @@ export default async function LostPetDetailPage({
         )}
 
         <div className="overflow-hidden rounded-2xl bg-card shadow-sm border">
-          <img
-            src={pet.image_url || "/sin_avatar.avif"}
-            alt={pet.pet_name}
-            className="h-72 w-full object-cover object-center sm:h-96"
-          />
+          <div className="relative h-72 w-full sm:h-96">
+            <Image
+              src={pet.image_url || "/sin_avatar.avif"}
+              alt={pet.pet_name}
+              fill
+              sizes="100vw"
+              priority
+              className="object-cover object-center"
+            />
+          </div>
 
           <div className="space-y-8 p-8">
             <div className="flex items-center justify-between">

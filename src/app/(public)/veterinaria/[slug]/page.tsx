@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Phone,
@@ -73,11 +74,16 @@ export default async function VeterinarianDetailPage({
           Volver al listado
         </Link>
         <div className="overflow-hidden rounded-2xl bg-card shadow-sm border">
-          <img
-            src={coverImage}
-            alt={veterinarian.name}
-            className="h-72 w-full object-cover object-center sm:h-96"
-          />
+          <div className="relative h-72 w-full sm:h-96">
+            <Image
+              src={coverImage}
+              alt={veterinarian.name}
+              fill
+              sizes="100vw"
+              priority
+              className="object-cover object-center"
+            />
+          </div>
 
           <div className="space-y-8 p-8">
           <div className="flex items-center justify-between">
@@ -219,12 +225,18 @@ export default async function VeterinarianDetailPage({
               <h2 className="mb-3 font-semibold">Fotos</h2>
               <div className="grid grid-cols-2 gap-3 px-6 sm:grid-cols-3">
                 {otherImages.map((image) => (
-                  <img
+                  <div
                     key={image.id}
-                    src={image.image_url}
-                    alt={veterinarian.name}
-                    className="aspect-square w-full rounded-lg border object-cover object-center"
-                  />
+                    className="relative aspect-square w-full overflow-hidden rounded-lg border"
+                  >
+                    <Image
+                      src={image.image_url}
+                      alt={veterinarian.name}
+                      fill
+                      sizes="(min-width: 640px) 33vw, 50vw"
+                      className="object-cover object-center"
+                    />
+                  </div>
                 ))}
               </div>
             </div>

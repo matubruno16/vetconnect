@@ -20,13 +20,33 @@ export default async function LostPetsPage({
 
   const { data: pageRows } = await supabase
     .from("lost_pets")
-    .select("*, cities (name)")
+    .select(
+      `
+    id,
+    pet_name,
+    species,
+    breed,
+    color,
+    last_seen_location,
+    last_seen_date,
+    image_url,
+    contact_phone,
+    contact_whatsapp,
+    status,
+    cities (
+      name
+    )
+  `,
+    )
     .eq("status", "lost")
     .order("created_at", { ascending: false })
     .range(from, to);
 
   const hasMore = (pageRows?.length ?? 0) > PAGE_SIZE;
-  const pets = pageRows?.slice(0, PAGE_SIZE);
+  const pets = pageRows?.slice(0, PAGE_SIZE).map((pet) => ({
+    ...pet,
+    cities: Array.isArray(pet.cities) ? pet.cities[0] : pet.cities,
+  }));
 
   return (
     <main className="min-h-screen bg-muted/30">

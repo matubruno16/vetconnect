@@ -392,3 +392,12 @@ create policy "site_settings_select_all" on site_settings
 drop policy if exists "site_settings_write_admin" on site_settings;
 create policy "site_settings_write_admin" on site_settings
   for all to authenticated using (true) with check (true);
+
+-- Índices de performance: cubren los filtros/orders que hace la home,
+-- la ficha de detalle y el mural de mascotas perdidas.
+create index if not exists veterinarians_is_active_idx on veterinarians (is_active);
+create index if not exists veterinarians_city_id_idx on veterinarians (city_id);
+create index if not exists veterinarians_created_at_idx on veterinarians (created_at desc);
+create index if not exists gallery_images_veterinarian_id_idx on gallery_images (veterinarian_id);
+create index if not exists veterinarian_specialties_specialty_id_idx on veterinarian_specialties (specialty_id);
+create index if not exists lost_pets_status_created_at_idx on lost_pets (status, created_at desc);
