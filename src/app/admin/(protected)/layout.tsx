@@ -15,10 +15,10 @@ export default async function ProtectedAdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30">
       <Sidebar />
 
-      <main className="flex-1 p-8">{children}</main>
+      <main className="min-h-screen pt-8 pr-8 pb-8 pl-24">{children}</main>
     </div>
   );
 }
