@@ -35,17 +35,17 @@ export function VeterinarianCard({
   const href = `/veterinaria/${veterinarian.slug}`;
 
   return (
-    <div className="flex overflow-hidden rounded-2xl border border-violet-100 bg-violet-50/40 shadow-lg shadow-violet-200/40 backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-200/50">
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-violet-100 bg-violet-50/40 shadow-lg shadow-violet-200/40 backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-200/50 sm:flex-row">
       <Link
         href={href}
-        className="relative flex w-32 shrink-0 items-center justify-center overflow-hidden bg-linear-to-br from-violet-100 to-violet-200/70 sm:w-44"
+        className="relative flex h-48 w-full shrink-0 items-center justify-center overflow-hidden bg-linear-to-br from-violet-100 to-violet-200/70 sm:h-auto sm:w-44"
       >
         {coverImage ? (
           <Image
             src={coverImage}
             alt={veterinarian.name}
             fill
-            sizes="(min-width: 640px) 176px, 128px"
+            sizes="(min-width: 640px) 176px, 100vw"
             className="object-cover object-center"
           />
         ) : (
