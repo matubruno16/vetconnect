@@ -14,7 +14,7 @@ export default async function ReportLostPetPage() {
 
   return (
     <main className="min-h-screen bg-muted/30">
-      <section className="mx-auto max-w-2xl px-6 py-16 lg:max-w-4xl">
+      <section className="mx-auto max-w-2xl px-6 py-16 lg:max-w-3xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold tracking-tight">
             Reportar mascota perdida

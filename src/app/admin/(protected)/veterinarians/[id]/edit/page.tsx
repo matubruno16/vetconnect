@@ -51,7 +51,7 @@ export default async function EditVeterinarianPage({
   }
 
   return (
-    <div className="max-w-2xl space-y-8 lg:max-w-4xl">
+    <div className="max-w-2xl space-y-8 lg:max-w-3xl">
       <div>
         <h1 className="text-3xl font-bold">Editar Veterinaria</h1>
         <p className="text-muted-foreground">

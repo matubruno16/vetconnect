@@ -18,7 +18,7 @@ export default async function VeterinariansPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-4xl space-y-6 mx-auto">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Veterinarias</h1>

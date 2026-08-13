@@ -18,7 +18,7 @@ export default async function AdminLostPetsPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-4xl space-y-6 mx-auto">
       <div>
         <h1 className="text-3xl font-bold">Mascotas perdidas</h1>
         <p className="text-muted-foreground">
