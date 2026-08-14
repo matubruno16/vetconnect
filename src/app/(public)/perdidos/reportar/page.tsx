@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { createLostPet } from "@/features/lost-pets/actions/create-lost-pet";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,15 @@ import { FilePicker } from "@/components/forms/file-picker";
 import LocationPicker from "@/components/maps/location-picker-loader";
 import { PawPrint, Phone } from "lucide-react";
 import { PET_SPECIES } from "@/constants/pet-species";
+
+export const metadata: Metadata = {
+  title: "Reportar mascota perdida",
+  description:
+    "Reportá una mascota perdida en Tandil con foto, ubicación y datos de contacto para que la comunidad te ayude a encontrarla.",
+  alternates: {
+    canonical: "/perdidos/reportar",
+  },
+};
 
 export default async function ReportLostPetPage() {
   const supabase = await createClient();

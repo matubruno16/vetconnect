@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Solicitud enviada",
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default function RegisterThanksPage() {
   return (

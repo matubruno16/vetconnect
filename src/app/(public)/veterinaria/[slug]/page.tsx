@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -17,13 +19,18 @@ import { OpenNowBadge } from "@/components/shared/open-now-badge";
 import MapPreview from "@/components/maps/map-preview-loader";
 import { WEEKDAYS } from "@/constants/weekdays";
 
-export default async function VeterinarianDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+const BASE_URL = "https://vetconnect-tandil.vercel.app";
+const SCHEMA_DAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
+const getVeterinarianBySlug = cache(async (slug: string) => {
   const supabase = await createClient();
 
   const { data: veterinarian } = await supabase
@@ -44,9 +51,58 @@ export default async function VeterinarianDetailPage({
     .eq("slug", slug)
     .single();
 
+  return veterinarian;
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const veterinarian = await getVeterinarianBySlug(slug);
+
+  if (!veterinarian) {
+    return { title: "Veterinaria no encontrada" };
+  }
+
+  const cityName = veterinarian.cities?.name;
+  const title = cityName
+    ? `${veterinarian.name} — Veterinaria en ${cityName}`
+    : veterinarian.name;
+  const description =
+    veterinarian.description ||
+    `${veterinarian.name}: dirección, teléfono, horarios y especialidades. Veterinaria habilitada por el Colegio de Veterinarios de Tandil.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/veterinaria/${veterinarian.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/veterinaria/${veterinarian.slug}`,
+      type: "website",
+    },
+  };
+}
+
+export default async function VeterinarianDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const veterinarian = await getVeterinarianBySlug(slug);
+
   if (!veterinarian) {
     return <div>No encontrado</div>;
   }
+
+  const supabase = await createClient();
 
   const [{ data: schedules }, { data: galleryImages }] = await Promise.all([
     supabase.from("schedules").select("*").eq("veterinarian_id", veterinarian.id),
@@ -63,8 +119,82 @@ export default async function VeterinarianDetailPage({
     (s) => s.day_of_week === new Date().getDay(),
   );
 
+  const veterinaryCareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "VeterinaryCare",
+    name: veterinarian.name,
+    description: veterinarian.description || undefined,
+    url: `${BASE_URL}/veterinaria/${veterinarian.slug}`,
+    telephone: veterinarian.phone || undefined,
+    email: veterinarian.email || undefined,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: veterinarian.address,
+      addressLocality: veterinarian.cities?.name,
+      addressCountry: "AR",
+    },
+    geo:
+      veterinarian.latitude && veterinarian.longitude
+        ? {
+            "@type": "GeoCoordinates",
+            latitude: veterinarian.latitude,
+            longitude: veterinarian.longitude,
+          }
+        : undefined,
+    image: galleryImages?.[0]?.image_url || undefined,
+    openingHoursSpecification: veterinarian.is_24h
+      ? [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ],
+            opens: "00:00",
+            closes: "23:59",
+          },
+        ]
+      : schedules
+            ?.filter((s) => !s.is_closed && s.open_time && s.close_time)
+            .map((s) => ({
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: SCHEMA_DAY_NAMES[s.day_of_week],
+              opens: s.open_time?.slice(0, 5),
+              closes: s.close_time?.slice(0, 5),
+            })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: BASE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: veterinarian.name,
+        item: `${BASE_URL}/veterinaria/${veterinarian.slug}`,
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-muted/30">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(veterinaryCareJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <section className="mx-auto max-w-4xl px-6 py-16">
         <Link
           href="/"
@@ -224,14 +354,14 @@ export default async function VeterinarianDetailPage({
             <div>
               <h2 className="mb-3 font-semibold">Fotos</h2>
               <div className="grid grid-cols-2 gap-3 px-6 sm:grid-cols-3">
-                {otherImages.map((image) => (
+                {otherImages.map((image, index) => (
                   <div
                     key={image.id}
                     className="relative aspect-square w-full overflow-hidden rounded-lg border"
                   >
                     <Image
                       src={image.image_url}
-                      alt={veterinarian.name}
+                      alt={`${veterinarian.name} — foto ${index + 2}`}
                       fill
                       sizes="(min-width: 640px) 33vw, 50vw"
                       className="object-cover object-center"

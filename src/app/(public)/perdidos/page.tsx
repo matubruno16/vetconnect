@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -6,6 +7,15 @@ import { Pagination } from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
 
 const PAGE_SIZE = 10;
+
+export const metadata: Metadata = {
+  title: "Mascotas perdidas en Tandil",
+  description:
+    "Mural comunitario de mascotas perdidas en Tandil. Reportá una mascota perdida o avisá al colegio si viste alguna de estas.",
+  alternates: {
+    canonical: "/perdidos",
+  },
+};
 
 export default async function LostPetsPage({
   searchParams,

@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -14,6 +16,53 @@ import MapPreview from "@/components/maps/map-preview-loader";
 import { MarkFoundButton } from "@/components/shared/mark-found-button";
 import { ReportFoundTipButton } from "@/components/shared/report-found-tip-button";
 
+const BASE_URL = "https://vetconnect-tandil.vercel.app";
+
+const getLostPetById = cache(async (id: string) => {
+  const supabase = await createClient();
+
+  const { data: pet } = await supabase
+    .from("lost_pets")
+    .select("*, cities (name)")
+    .eq("id", id)
+    .single();
+
+  return pet;
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const pet = await getLostPetById(id);
+
+  if (!pet) {
+    return { title: "Aviso no encontrado" };
+  }
+
+  const title =
+    pet.status === "found"
+      ? `${pet.pet_name} — Encontrada en Tandil`
+      : `${pet.pet_name} — Perdida en ${pet.last_seen_location}`;
+  const description = `${pet.pet_name}: ${[pet.species, pet.breed, pet.color].filter(Boolean).join(", ")}. Vista por última vez en ${pet.last_seen_location}. Contactate si la viste.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/perdidos/${pet.id}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/perdidos/${pet.id}`,
+      images: pet.image_url ? [pet.image_url] : undefined,
+    },
+  };
+}
+
 export default async function LostPetDetailPage({
   params,
   searchParams,
@@ -23,13 +72,7 @@ export default async function LostPetDetailPage({
 }) {
   const { id } = await params;
   const { token } = await searchParams;
-  const supabase = await createClient();
-
-  const { data: pet } = await supabase
-    .from("lost_pets")
-    .select("*, cities (name)")
-    .eq("id", id)
-    .single();
+  const pet = await getLostPetById(id);
 
   if (!pet) {
     return <div>No encontrado</div>;

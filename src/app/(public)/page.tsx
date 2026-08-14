@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { VeterinarianCard } from "@/components/shared/veterinarian-card";
 import HomeFilters from "@/components/shared/home-filters";
 import { Pagination } from "@/components/shared/pagination";
 
 const PAGE_SIZE = 10;
+
+export const metadata: Metadata = {
+  title: "Cartilla de Veterinarios en Tandil",
+  description:
+    "Buscá veterinarios y clínicas veterinarias habilitadas por el Colegio de Veterinarios de Tandil. Filtrá por ciudad, especialidad y atención las 24 horas.",
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default async function HomePage({
   searchParams,

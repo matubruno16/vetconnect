@@ -1,6 +1,16 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { registerVeterinarian } from "@/features/veterinarians/actions/register-veterinarian";
 import { VeterinarianForm } from "@/components/forms/veterinarian-form";
+
+export const metadata: Metadata = {
+  title: "Registrar mi veterinaria",
+  description:
+    "Sumá tu veterinaria a la cartilla del Colegio de Veterinarios de Tandil. Completá tus datos y el colegio revisa y aprueba tu ficha.",
+  alternates: {
+    canonical: "/registrarse",
+  },
+};
 
 export default async function RegisterPage() {
   const supabase = await createClient();
